@@ -12,6 +12,7 @@ import (
 
 type Querier interface {
 	CreateOutlet(ctx context.Context, arg CreateOutletParams) (Outlet, error)
+	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
 	CreateRequestLog(ctx context.Context, arg CreateRequestLogParams) (RequestLog, error)
 	CreateTransaction(ctx context.Context, arg CreateTransactionParams) (Transaction, error)
 	GetOutletByUserID(ctx context.Context, user uuid.UUID) (Outlet, error)

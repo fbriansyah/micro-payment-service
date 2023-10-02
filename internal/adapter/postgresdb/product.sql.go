@@ -9,6 +9,25 @@ import (
 	"context"
 )
 
+const createProduct = `-- name: CreateProduct :one
+INSERT INTO products (product_code, product_name, product_endpoint)
+VALUES ($1,$2,$3)
+RETURNING product_code, product_name, product_endpoint
+`
+
+type CreateProductParams struct {
+	ProductCode     string `json:"product_code"`
+	ProductName     string `json:"product_name"`
+	ProductEndpoint string `json:"product_endpoint"`
+}
+
+func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error) {
+	row := q.db.QueryRowContext(ctx, createProduct, arg.ProductCode, arg.ProductName, arg.ProductEndpoint)
+	var i Product
+	err := row.Scan(&i.ProductCode, &i.ProductName, &i.ProductEndpoint)
+	return i, err
+}
+
 const getProductByCode = `-- name: GetProductByCode :one
 SELECT product_code, product_name, product_endpoint FROM products
 WHERE product_code = $1 LIMIT 1
