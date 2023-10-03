@@ -28,7 +28,7 @@ CREATE TABLE "request_logs" (
   "id" UUID PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "mode" varchar NOT NULL,
   "product" varchar NOT NULL,
-  "bill_number" bigint NOT NULL,
+  "bill_number" varchar NOT NULL,
   "name" varchar NOT NULL,
   "total_amount" bigint NOT NULL,
   "biller_response" text NOT NULL DEFAULT '',

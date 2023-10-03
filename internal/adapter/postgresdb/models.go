@@ -29,7 +29,7 @@ type RequestLog struct {
 	// inq or pay
 	Mode           string `json:"mode"`
 	Product        string `json:"product"`
-	BillNumber     int64  `json:"bill_number"`
+	BillNumber     string `json:"bill_number"`
 	Name           string `json:"name"`
 	TotalAmount    int64  `json:"total_amount"`
 	BillerResponse string `json:"biller_response"`

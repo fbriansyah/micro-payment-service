@@ -21,7 +21,7 @@ RETURNING id, mode, product, bill_number, name, total_amount, biller_response, o
 type CreateRequestLogParams struct {
 	Mode           string    `json:"mode"`
 	Product        string    `json:"product"`
-	BillNumber     int64     `json:"bill_number"`
+	BillNumber     string    `json:"bill_number"`
 	Name           string    `json:"name"`
 	TotalAmount    int64     `json:"total_amount"`
 	BillerResponse string    `json:"biller_response"`
