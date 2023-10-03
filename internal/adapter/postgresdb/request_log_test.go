@@ -9,13 +9,13 @@ import (
 )
 
 func CreateRandomRequestLog(
-	t *testing.T, mode string, product Product, outlet Outlet) RequestLog {
+	t *testing.T, mode string, amount int64, product Product, outlet Outlet) RequestLog {
 	arg := CreateRequestLogParams{
 		Mode:           mode,
 		Product:        product.ProductCode,
 		BillNumber:     util.RandomBillNumber(),
 		Name:           util.RandomString(5),
-		TotalAmount:    util.RandomMoney(),
+		TotalAmount:    amount,
 		BillerResponse: util.RandomString(10),
 		Outlet:         outlet.ID,
 	}
@@ -38,14 +38,14 @@ func TestCreateRequestLog(t *testing.T) {
 	product := CreateRandomProduct(t)
 	outlet := CreateRandomOutlet(t)
 
-	CreateRandomRequestLog(t, "INQ", product, outlet)
+	CreateRandomRequestLog(t, "INQ", util.RandomMoney(), product, outlet)
 }
 
 func TestGetRequestLogByID(t *testing.T) {
 	product := CreateRandomProduct(t)
 	outlet := CreateRandomOutlet(t)
 
-	log1 := CreateRandomRequestLog(t, "INQ", product, outlet)
+	log1 := CreateRandomRequestLog(t, "INQ", util.RandomMoney(), product, outlet)
 
 	log2, err := testQueries.GetRequestLogByID(context.Background(), log1.ID)
 	require.NoError(t, err)
