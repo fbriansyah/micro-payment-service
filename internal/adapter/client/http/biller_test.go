@@ -19,9 +19,6 @@ func TestInquiry(t *testing.T) {
 	require.Equal(t, false, response.Error)
 	require.Equal(t, billNumber, response.Data.BillNumber)
 
-	// base_amount, fine_amount, total_amount
-	// 10000, 2000, 12000
-
 	require.Equal(t, expectedBaseAmount, response.Data.BaseAmount)
 	require.Equal(t, expectedFineAmount, response.Data.FineAmount)
 	require.Equal(t, expectedTotalAmount, response.Data.TotalAmount)
