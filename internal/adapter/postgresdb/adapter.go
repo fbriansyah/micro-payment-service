@@ -1,11 +1,16 @@
 package postgresdb
 
 import (
+	"context"
 	"database/sql"
+	"fmt"
+
+	dmtransaction "github.com/fbriansyah/micro-payment-service/internal/application/domain/transaction"
 )
 
 type DatabaseAdapter interface {
 	Querier
+	PaymentTx(ctx context.Context, arg InquryParams) (dmtransaction.Transaction, error)
 }
 
 type DatabaseStore struct {
@@ -20,20 +25,20 @@ func NewDatabaseAdapter(db *sql.DB) DatabaseAdapter {
 	}
 }
 
-// func (store *DatabaseStore) execTx(ctx context.Context, fn func(*Queries) error) error {
-// 	tx, err := store.db.BeginTx(ctx, nil)
-// 	if err != nil {
-// 		return err
-// 	}
+func (store *DatabaseStore) execTx(ctx context.Context, fn func(*Queries) error) error {
+	tx, err := store.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
 
-// 	q := New(tx)
-// 	err = fn(q)
-// 	if err != nil {
-// 		if rbErr := tx.Rollback(); rbErr != nil {
-// 			return fmt.Errorf("tx err: %v, rb err: %v", err, rbErr)
-// 		}
-// 		return err
-// 	}
+	q := New(tx)
+	err = fn(q)
+	if err != nil {
+		if rbErr := tx.Rollback(); rbErr != nil {
+			return fmt.Errorf("tx err: %v, rb err: %v", err, rbErr)
+		}
+		return err
+	}
 
-// 	return tx.Commit()
-// }
+	return tx.Commit()
+}

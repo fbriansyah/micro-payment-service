@@ -6,6 +6,11 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	SERVICE_MODE_INQ = "INQ"
+	SERVICE_MODE_PAY = "PAY"
+)
+
 type RequestLog struct {
 	ID          uuid.UUID `json:"id"`
 	Mode        string    `json:"mode"`
