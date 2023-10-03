@@ -18,5 +18,5 @@ type DatabasePort interface {
 	GetRequestLogByID(ctx context.Context, id uuid.UUID) (postgresdb.RequestLog, error)
 	GetTransactionByID(ctx context.Context, id uuid.UUID) (postgresdb.Transaction, error)
 	UpdateOutletDeposit(ctx context.Context, arg postgresdb.UpdateOutletDepositParams) (postgresdb.Outlet, error)
-	PaymentTx(ctx context.Context, arg postgresdb.InquryParams) (dmtransaction.Transaction, error)
+	PaymentTx(ctx context.Context, arg postgresdb.PaymentParam) (dmtransaction.Transaction, error)
 }

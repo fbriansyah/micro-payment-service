@@ -8,14 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type InquryParams struct {
+type PaymentParam struct {
 	LogInquiry       RequestLog
 	UserId           uuid.UUID
 	RefferenceNumber string
 	PayResponseStr   string
 }
 
-func (a *DatabaseStore) PaymentTx(ctx context.Context, arg InquryParams) (dmtransaction.Transaction, error) {
+func (a *DatabaseStore) PaymentTx(ctx context.Context, arg PaymentParam) (dmtransaction.Transaction, error) {
 	var transaction dmtransaction.Transaction
 
 	err := a.execTx(ctx, func(q *Queries) error {
@@ -52,7 +52,7 @@ func (a *DatabaseStore) PaymentTx(ctx context.Context, arg InquryParams) (dmtran
 		}
 
 		_, err = q.UpdateOutletDeposit(ctx, UpdateOutletDepositParams{
-			Deposit: outlet.Deposit - transaction.Amount,
+			Deposit: outlet.Deposit - trx.Amount,
 			ID:      outlet.ID,
 		})
 		if err != nil {

@@ -128,7 +128,7 @@ func (s *PaymentService) Payment(ctx context.Context, arg PaymentRequestParams) 
 		return dmtransaction.Transaction{}, err
 	}
 
-	trx, err := s.db.PaymentTx(ctx, postgresdb.InquryParams{
+	trx, err := s.db.PaymentTx(ctx, postgresdb.PaymentParam{
 		LogInquiry:       logInq,
 		UserId:           arg.UserId,
 		RefferenceNumber: reffNum,

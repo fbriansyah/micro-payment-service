@@ -70,7 +70,7 @@ func TestPayment(t *testing.T) {
 	require.NoError(t, err)
 
 	arg := InquryRequestParams{
-		BillNumber: "6310233333334",
+		BillNumber: "6310233333335",
 		UserId:     outlet.User,
 		Product:    product.ProductCode,
 	}
