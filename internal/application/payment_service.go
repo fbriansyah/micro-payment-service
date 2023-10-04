@@ -8,10 +8,10 @@ import (
 	httpclient "github.com/fbriansyah/micro-payment-service/internal/adapter/client/http"
 	"github.com/fbriansyah/micro-payment-service/internal/adapter/postgresdb"
 	dmlog "github.com/fbriansyah/micro-payment-service/internal/application/domain/log"
+	dmrequest "github.com/fbriansyah/micro-payment-service/internal/application/domain/request"
 	dmtransaction "github.com/fbriansyah/micro-payment-service/internal/application/domain/transaction"
 	"github.com/fbriansyah/micro-payment-service/internal/port"
 	"github.com/fbriansyah/micro-payment-service/util"
-	"github.com/google/uuid"
 )
 
 var (
@@ -30,13 +30,7 @@ func NewPaymentService(billerClient port.BillerClientPort, db port.DatabasePort)
 	}
 }
 
-type InquryRequestParams struct {
-	BillNumber string
-	UserId     uuid.UUID
-	Product    string
-}
-
-func (s *PaymentService) Inquiry(ctx context.Context, arg InquryRequestParams) (dmlog.RequestLog, error) {
+func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams) (dmlog.RequestLog, error) {
 	// Get product endpoint from database. SKIPED
 	product, err := s.db.GetProductByCode(ctx, arg.Product)
 	if err != nil {
@@ -85,12 +79,7 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg InquryRequestParams) (
 	}, nil
 }
 
-type PaymentRequestParams struct {
-	UserId uuid.UUID
-	LogInq uuid.UUID
-}
-
-func (s *PaymentService) Payment(ctx context.Context, arg PaymentRequestParams) (dmtransaction.Transaction, error) {
+func (s *PaymentService) Payment(ctx context.Context, arg dmrequest.PaymentRequestParams) (dmtransaction.Transaction, error) {
 
 	logInq, err := s.db.GetRequestLogByID(ctx, arg.LogInq)
 	if err != nil {
