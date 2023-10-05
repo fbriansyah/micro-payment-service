@@ -1,0 +1,34 @@
+version: "3"
+services:
+  paymentdb:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=db_payment
+  paymentms:
+    image: efner/payment-microservice:1.0
+    ports:
+      - "9090:9090"
+    environment:
+      - DB_SOURCE=postgresql://root:secret@postgres:5432/db_payment?sslmode=disable
+      - BILLER_ENDPOINT=http://billerms:8080
+    depends_on:
+      - paymentdb
+      - billerms
+    entrypoint: "/app/payment-microservice"
+  billerdb:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=db_biller
+  billerms:
+    image: efner/biller-microservice:1.0
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_SOURCE=postgresql://root:secret@postgres:5432/db_biller?sslmode=disable
+    depends_on:
+      - billerdb
+    entrypoint: "/app/biller-microservice"
