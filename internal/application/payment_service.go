@@ -45,7 +45,7 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryReques
 	// Send Inquiry Request to product biller service.
 	inqResponse, err := s.billerClient.Inquiry(arg.BillNumber)
 	if err != nil {
-		return dmlog.RequestLog{}, errors.New("error get bill data")
+		return dmlog.RequestLog{}, err
 	}
 
 	billerResponseStr, err := json.Marshal(inqResponse)
