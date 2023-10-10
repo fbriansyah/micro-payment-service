@@ -3,7 +3,7 @@ module github.com/fbriansyah/micro-payment-service
 go 1.20
 
 require (
-	github.com/fbriansyah/micro-payment-proto v0.0.8
+	github.com/fbriansyah/micro-payment-proto v0.0.9
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/google/uuid v1.3.1
 	github.com/lib/pq v1.10.9
