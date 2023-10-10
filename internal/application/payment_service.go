@@ -34,18 +34,18 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryReques
 	// Get product endpoint from database. SKIPED
 	product, err := s.db.GetProductByCode(ctx, arg.Product)
 	if err != nil {
-		return dmlog.RequestLog{}, err
+		return dmlog.RequestLog{}, errors.New("error get product by code")
 	}
 	// Check Outlet
 	outlet, err := s.db.GetOutletByUserID(ctx, arg.UserId)
 	if err != nil {
-		return dmlog.RequestLog{}, err
+		return dmlog.RequestLog{}, errors.New("error get outlet by user id")
 	}
 
 	// Send Inquiry Request to product biller service.
 	inqResponse, err := s.billerClient.Inquiry(arg.BillNumber)
 	if err != nil {
-		return dmlog.RequestLog{}, err
+		return dmlog.RequestLog{}, errors.New("error get bill data")
 	}
 
 	billerResponseStr, err := json.Marshal(inqResponse)
