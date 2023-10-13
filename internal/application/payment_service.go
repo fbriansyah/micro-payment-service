@@ -14,9 +14,7 @@ import (
 	"github.com/fbriansyah/micro-payment-service/util"
 )
 
-var (
-	ErrorinsufficientDeposit = errors.New("insufficient deposit")
-)
+var ErrorinsufficientDeposit = errors.New("insufficient deposit")
 
 type PaymentService struct {
 	billerClient port.BillerClientPort
@@ -63,7 +61,6 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryReques
 		BillerResponse: string(billerResponseStr),
 		Outlet:         outlet.ID,
 	})
-
 	if err != nil {
 		return dmlog.RequestLog{}, err
 	}
@@ -74,13 +71,14 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryReques
 		Product:     logInq.Product,
 		BillNumber:  logInq.BillNumber,
 		Name:        logInq.Name,
+		BaseAmount:  inqResponse.Data.BaseAmount,
+		FineAmount:  inqResponse.Data.FineAmount,
 		TotalAmount: logInq.TotalAmount,
 		CreatedAt:   logInq.CreatedAt,
 	}, nil
 }
 
 func (s *PaymentService) Payment(ctx context.Context, arg dmrequest.PaymentRequestParams) (dmtransaction.Transaction, error) {
-
 	logInq, err := s.db.GetRequestLogByID(ctx, arg.LogInq)
 	if err != nil {
 		return dmtransaction.Transaction{}, err

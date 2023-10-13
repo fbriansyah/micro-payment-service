@@ -18,7 +18,6 @@ func (a *GrpcServerAdapter) Inquiry(ctx context.Context, reqParam *payment.Inqui
 		UserId:     uuid.MustParse(reqParam.UserId),
 		Product:    reqParam.ProductCode,
 	})
-
 	if err != nil {
 		return &payment.InquiryResponse{}, generateError(
 			codes.FailedPrecondition,
@@ -32,6 +31,10 @@ func (a *GrpcServerAdapter) Inquiry(ctx context.Context, reqParam *payment.Inqui
 		ProductCode: logInq.Product,
 		Name:        logInq.Name,
 		TotalAmount: float64(logInq.TotalAmount),
+		DetailBill: &payment.DetailBill{
+			BaseAmount: float64(logInq.BaseAmount),
+			FineAmount: float64(logInq.FineAmount),
+		},
 	}, nil
 }
 
@@ -41,7 +44,6 @@ func (a *GrpcServerAdapter) Payment(ctx context.Context, reqParam *payment.Payme
 		UserId: uuid.MustParse(reqParam.UserId),
 		LogInq: uuid.MustParse(reqParam.InqId),
 	})
-
 	if err != nil {
 		return &payment.PaymentResponse{}, generateError(
 			codes.FailedPrecondition,
