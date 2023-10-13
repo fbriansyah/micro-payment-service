@@ -25,7 +25,7 @@ func main() {
 
 	billerAdapter := httpclient.NewHttpAdapter(config.BillerEndpoint)
 
-	paymentService := application.NewPaymentService(billerAdapter, databaseAdapter)
+	paymentService := application.NewService(billerAdapter, databaseAdapter)
 
 	serverAdapter := grpcserver.NewGrpcServerAdapter(paymentService, config.GrpcPort)
 	serverAdapter.Run()

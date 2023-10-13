@@ -16,19 +16,19 @@ import (
 
 var ErrorinsufficientDeposit = errors.New("insufficient deposit")
 
-type PaymentService struct {
+type Service struct {
 	billerClient port.BillerClientPort
 	db           port.DatabasePort
 }
 
-func NewPaymentService(billerClient port.BillerClientPort, db port.DatabasePort) *PaymentService {
-	return &PaymentService{
+func NewService(billerClient port.BillerClientPort, db port.DatabasePort) *Service {
+	return &Service{
 		billerClient: billerClient,
 		db:           db,
 	}
 }
 
-func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams) (dmlog.RequestLog, error) {
+func (s *Service) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams) (dmlog.RequestLog, error) {
 	// Get product endpoint from database. SKIPED
 	product, err := s.db.GetProductByCode(ctx, arg.Product)
 	if err != nil {
@@ -78,7 +78,7 @@ func (s *PaymentService) Inquiry(ctx context.Context, arg dmrequest.InquryReques
 	}, nil
 }
 
-func (s *PaymentService) Payment(ctx context.Context, arg dmrequest.PaymentRequestParams) (dmtransaction.Transaction, error) {
+func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParams) (dmtransaction.Transaction, error) {
 	logInq, err := s.db.GetRequestLogByID(ctx, arg.LogInq)
 	if err != nil {
 		return dmtransaction.Transaction{}, err

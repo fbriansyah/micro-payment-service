@@ -12,8 +12,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var testService *PaymentService
-var testQueries *postgresdb.Queries
+var (
+	testService *Service
+	testQueries *postgresdb.Queries
+)
 
 func TestMain(m *testing.M) {
 	config, err := util.LoadConfig("../../")
@@ -30,7 +32,7 @@ func TestMain(m *testing.M) {
 	testQueries = postgresdb.New(db)
 	dbAdapter := postgresdb.NewDatabaseAdapter(db)
 
-	testService = NewPaymentService(billerClient, dbAdapter)
+	testService = NewService(billerClient, dbAdapter)
 
 	os.Exit(m.Run())
 }

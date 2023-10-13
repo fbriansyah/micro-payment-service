@@ -15,6 +15,7 @@ type DatabasePort interface {
 	CreateTransaction(ctx context.Context, arg postgresdb.CreateTransactionParams) (postgresdb.Transaction, error)
 	GetOutletByUserID(ctx context.Context, user uuid.UUID) (postgresdb.Outlet, error)
 	GetProductByCode(ctx context.Context, productCode string) (postgresdb.Product, error)
+	GetProducts(ctx context.Context) ([]postgresdb.Product, error)
 	GetRequestLogByID(ctx context.Context, id uuid.UUID) (postgresdb.RequestLog, error)
 	GetTransactionByID(ctx context.Context, id uuid.UUID) (postgresdb.Transaction, error)
 	UpdateOutletDeposit(ctx context.Context, arg postgresdb.UpdateOutletDepositParams) (postgresdb.Outlet, error)

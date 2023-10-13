@@ -6,3 +6,6 @@ WHERE product_code = $1 LIMIT 1;
 INSERT INTO products (product_code, product_name, product_endpoint)
 VALUES ($1,$2,$3)
 RETURNING *;
+
+-- name: GetProducts :many
+SELECT * FROM products ORDER BY product_name;

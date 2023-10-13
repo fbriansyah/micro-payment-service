@@ -17,6 +17,7 @@ type Querier interface {
 	CreateTransaction(ctx context.Context, arg CreateTransactionParams) (Transaction, error)
 	GetOutletByUserID(ctx context.Context, user uuid.UUID) (Outlet, error)
 	GetProductByCode(ctx context.Context, productCode string) (Product, error)
+	GetProducts(ctx context.Context) ([]Product, error)
 	GetRequestLogByID(ctx context.Context, id uuid.UUID) (RequestLog, error)
 	GetTransactionByID(ctx context.Context, id uuid.UUID) (Transaction, error)
 	UpdateOutletDeposit(ctx context.Context, arg UpdateOutletDepositParams) (Outlet, error)
