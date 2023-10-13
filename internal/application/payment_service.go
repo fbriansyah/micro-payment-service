@@ -13,8 +13,6 @@ import (
 	"github.com/fbriansyah/micro-payment-service/util"
 )
 
-var ErrorinsufficientDeposit = errors.New("insufficient deposit")
-
 func (s *Service) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams) (dmlog.RequestLog, error) {
 	// Get product endpoint from database. SKIPED
 	product, err := s.db.GetProductByCode(ctx, arg.Product)
