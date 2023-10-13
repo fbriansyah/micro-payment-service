@@ -10,23 +10,10 @@ import (
 	dmlog "github.com/fbriansyah/micro-payment-service/internal/application/domain/log"
 	dmrequest "github.com/fbriansyah/micro-payment-service/internal/application/domain/request"
 	dmtransaction "github.com/fbriansyah/micro-payment-service/internal/application/domain/transaction"
-	"github.com/fbriansyah/micro-payment-service/internal/port"
 	"github.com/fbriansyah/micro-payment-service/util"
 )
 
 var ErrorinsufficientDeposit = errors.New("insufficient deposit")
-
-type Service struct {
-	billerClient port.BillerClientPort
-	db           port.DatabasePort
-}
-
-func NewService(billerClient port.BillerClientPort, db port.DatabasePort) *Service {
-	return &Service{
-		billerClient: billerClient,
-		db:           db,
-	}
-}
 
 func (s *Service) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams) (dmlog.RequestLog, error) {
 	// Get product endpoint from database. SKIPED
