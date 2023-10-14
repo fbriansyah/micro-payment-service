@@ -6,6 +6,7 @@ import (
 	dmproduct "github.com/fbriansyah/micro-payment-service/internal/application/domain/product"
 )
 
+// GetAllProducts return all products
 func (s *Service) GetAllProducts(ctx context.Context) ([]dmproduct.Product, error) {
 	products := []dmproduct.Product{}
 
