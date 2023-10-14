@@ -11,7 +11,7 @@ services:
     ports:
       - "9090:9090"
     environment:
-      - DB_SOURCE=postgresql://root:secret@postgres:5432/db_payment?sslmode=disable
+      - DB_SOURCE=postgresql://root:secret@paymentdb:5432/db_payment?sslmode=disable
       - BILLER_ENDPOINT=http://billerms:8080
     depends_on:
       - paymentdb
@@ -28,7 +28,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_SOURCE=postgresql://root:secret@postgres:5432/db_biller?sslmode=disable
+      - DB_SOURCE=postgresql://root:secret@billerdb:5432/db_biller?sslmode=disable
     depends_on:
       - billerdb
     entrypoint: "/app/biller-microservice"
