@@ -64,6 +64,7 @@ func (s *Service) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams
 }
 
 func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParams) (dmtransaction.Transaction, error) {
+	// get inquiry detail for payment request
 	logInq, err := s.db.GetRequestLogByID(ctx, arg.LogInq)
 	if err != nil {
 		return dmtransaction.Transaction{}, err
@@ -78,14 +79,13 @@ func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParam
 	if err != nil {
 		return dmtransaction.Transaction{}, err
 	}
-	// Check response error.
-	// 		- if no error, save response to `request_logs`.
-	// 		- if error, send error to broker.
+	// check outlet deposit (balance)
 	if outlet.Deposit < logInq.TotalAmount {
 		return dmtransaction.Transaction{}, err
 	}
 
 	reffNum := util.RandomRefferenceNumber()
+	// send payment request to biller
 	payResponse, err := s.billerClient.Payment(httpclient.PaymentRequest{
 		BillNumber:       logInq.BillNumber,
 		RefferenceNumber: reffNum,
@@ -100,6 +100,7 @@ func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParam
 		return dmtransaction.Transaction{}, err
 	}
 
+	// call payment transaction function
 	trx, err := s.db.PaymentTx(ctx, postgresdb.PaymentParam{
 		LogInquiry:       logInq,
 		UserId:           arg.UserId,
