@@ -8,8 +8,10 @@ import (
 
 	httpclient "github.com/fbriansyah/micro-payment-service/internal/adapter/client/http"
 	"github.com/fbriansyah/micro-payment-service/internal/adapter/postgresdb"
+	rabbitmq "github.com/fbriansyah/micro-payment-service/internal/adapter/rabitmq"
 	"github.com/fbriansyah/micro-payment-service/util"
 	_ "github.com/lib/pq"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 var (
@@ -32,7 +34,21 @@ func TestMain(m *testing.M) {
 	testQueries = postgresdb.New(db)
 	dbAdapter := postgresdb.NewDatabaseAdapter(db)
 
-	testService = NewService(billerClient, dbAdapter)
+	// setup event broker
+	amqClient, err := amqp.Dial(config.EventBrokerAddress)
+	if err != nil {
+		if err != nil {
+			log.Fatal("cannot connect rabbit mq:", err)
+		}
+	}
+
+	// create event emiter
+	eventEmiter, err := rabbitmq.NewEmitter(amqClient)
+	if err != nil {
+		log.Fatal("cannot create event emiter", err)
+	}
+
+	testService = NewService(billerClient, dbAdapter, eventEmiter)
 
 	os.Exit(m.Run())
 }

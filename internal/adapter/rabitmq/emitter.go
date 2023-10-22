@@ -44,14 +44,14 @@ func (e *Emitter) Push(ctx context.Context, event string, severity string) error
 }
 
 // NewEmitter create rabbitmq event emitter and setup channel connection
-func NewEmitter(connection *amqp.Connection) (Emitter, error) {
-	emitter := Emitter{
+func NewEmitter(connection *amqp.Connection) (*Emitter, error) {
+	emitter := &Emitter{
 		connection: connection,
 	}
 
 	err := emitter.setup()
 	if err != nil {
-		return Emitter{}, err
+		return nil, err
 	}
 
 	return emitter, nil
