@@ -15,11 +15,13 @@ type PaymentParam struct {
 	PayResponseStr   string
 }
 
-func (a *DatabaseStore) PaymentTx(ctx context.Context, arg PaymentParam) (dmtransaction.Transaction, error) {
+func (a *DatabaseStore) PaymentTx(ctx context.Context, arg PaymentParam) (dmtransaction.Transaction, RequestLog, error) {
 	var transaction dmtransaction.Transaction
+	var logPay RequestLog
 
 	err := a.execTx(ctx, func(q *Queries) error {
-		logPay, err := q.CreateRequestLog(ctx, CreateRequestLogParams{
+		var err error
+		logPay, err = q.CreateRequestLog(ctx, CreateRequestLogParams{
 			Mode:           dmlog.SERVICE_MODE_PAY,
 			Product:        arg.LogInquiry.Product,
 			BillNumber:     arg.LogInquiry.BillNumber,
@@ -68,10 +70,9 @@ func (a *DatabaseStore) PaymentTx(ctx context.Context, arg PaymentParam) (dmtran
 
 		return nil
 	})
-
 	if err != nil {
-		return transaction, err
+		return transaction, RequestLog{}, err
 	}
 
-	return transaction, nil
+	return transaction, logPay, nil
 }

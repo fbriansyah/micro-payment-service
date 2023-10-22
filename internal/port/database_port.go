@@ -30,5 +30,5 @@ type DatabasePort interface {
 	// UpdateOutletDeposit update balance of the outlet
 	UpdateOutletDeposit(ctx context.Context, arg postgresdb.UpdateOutletDepositParams) (postgresdb.Outlet, error)
 	// PaymentTx create payment log and transaction record. This method also substract outlet deposit (balance)
-	PaymentTx(ctx context.Context, arg postgresdb.PaymentParam) (dmtransaction.Transaction, error)
+	PaymentTx(ctx context.Context, arg postgresdb.PaymentParam) (dmtransaction.Transaction, postgresdb.RequestLog, error)
 }

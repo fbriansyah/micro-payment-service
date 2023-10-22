@@ -22,9 +22,10 @@ func TestPayment(t *testing.T) {
 		PayResponseStr:   "{}",
 	}
 
-	tx, err := testAdapter.PaymentTx(context.Background(), arg)
+	tx, logPay, err := testAdapter.PaymentTx(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, tx)
+	require.NotEmpty(t, logPay)
 
 	outAfterPay, err := testQueries.GetOutletByUserID(context.Background(), outlet.User)
 	require.NoError(t, err)

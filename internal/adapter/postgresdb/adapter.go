@@ -10,7 +10,7 @@ import (
 
 type DatabaseAdapter interface {
 	Querier
-	PaymentTx(ctx context.Context, arg PaymentParam) (dmtransaction.Transaction, error)
+	PaymentTx(ctx context.Context, arg PaymentParam) (dmtransaction.Transaction, RequestLog, error)
 }
 
 type DatabaseStore struct {
