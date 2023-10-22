@@ -1,5 +1,8 @@
 DB_URL=postgresql://root:secret@localhost:5432/db_payment?sslmode=disable
 
+rabbit-mq:
+	docker run --name rabbit-mq -p 5672:5672 -d rabbitmq:3.9-alpine
+
 postgres:
 	docker run --name pg-local -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
 

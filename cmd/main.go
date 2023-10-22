@@ -7,7 +7,6 @@ import (
 	grpcserver "github.com/fbriansyah/micro-payment-service/internal/adapter/server/grpc"
 	"github.com/fbriansyah/micro-payment-service/internal/application"
 	"github.com/fbriansyah/micro-payment-service/util"
-	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 )
 
@@ -28,11 +27,9 @@ func main() {
 	billerAdapter := httpclient.NewHttpAdapter(config.BillerEndpoint)
 
 	// setup event broker
-	amqClient, err := amqp.Dial(config.EventBrokerAddress)
+	amqClient, err := connectToRabbit(config.EventBrokerAddress)
 	if err != nil {
-		if err != nil {
-			log.Fatal().Msgf("cannot connect rabbit mq: %v", err)
-		}
+		log.Fatal().Msgf("cannot connect to event broker: %v", err)
 	}
 
 	// create event emiter
