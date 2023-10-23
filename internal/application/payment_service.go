@@ -36,6 +36,13 @@ func (s *Service) Inquiry(ctx context.Context, arg dmrequest.InquryRequestParams
 		return dmlog.RequestLog{}, err
 	}
 
+	s.PushLog(ctx, LogPayload{
+		Type:       TYPE_PAYMENT_INQ,
+		Product:    product.ProductName,
+		BillNumber: arg.BillNumber,
+		Data:       string(billerResponseStr),
+	})
+
 	// save log inquiry to database
 	logInq, err := s.db.CreateRequestLog(ctx, postgresdb.CreateRequestLogParams{
 		Mode:           dmlog.SERVICE_MODE_INQ,
@@ -101,7 +108,7 @@ func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParam
 	}
 
 	// call payment transaction function
-	trx, err := s.db.PaymentTx(ctx, postgresdb.PaymentParam{
+	trx, _, err := s.db.PaymentTx(ctx, postgresdb.PaymentParam{
 		LogInquiry:       logInq,
 		UserId:           arg.UserId,
 		RefferenceNumber: reffNum,
@@ -112,6 +119,12 @@ func (s *Service) Payment(ctx context.Context, arg dmrequest.PaymentRequestParam
 	if err != nil {
 		return dmtransaction.Transaction{}, err
 	}
+	s.PushLog(ctx, LogPayload{
+		Type:       TYPE_PAYMENT_PAY,
+		Product:    logInq.Product,
+		BillNumber: logInq.BillNumber,
+		Data:       string(payResponseStr),
+	})
 
 	return trx, nil
 }
